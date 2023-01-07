@@ -49,7 +49,7 @@ function getValue(card) {
 
 
 
-//starting the game
+//starting the game (DEAL)
 document.getElementById("start-game-btn").addEventListener("click", function deal() {
     if(isAlive === true) {
         return
@@ -67,7 +67,7 @@ document.getElementById("start-game-btn").addEventListener("click", function dea
         dealerPoints += getValue(card)
         cardImg.src = "cards/" + card + ".png"
         dealerCardTable.append(cardImg)
-        // dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
     //generates 2 cards for the player
     for(i = 0; i < 2; i++) {
         const cardImg = document.createElement("img")
@@ -93,5 +93,17 @@ document.getElementById("new-card-btn").addEventListener("click", function hit()
     playerScoreBoard.innerHTML = `Player: ${playerPoints}`
     cardImg.src = "cards/" + card + ".png"
     playerCardTable.append(cardImg)
+})
+
+//STAND button
+document.getElementById("stand-btn").addEventListener("click", function stand() {
+    while(dealerPoints < 17) {
+        const cardImg = document.createElement("img")
+        let card = deck.pop()
+        dealerPoints += getValue(card)
+        cardImg.src = "cards/" + card + ".png"
+        dealerCardTable.append(cardImg)
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+    }
 })
 
