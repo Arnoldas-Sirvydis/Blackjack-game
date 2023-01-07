@@ -10,20 +10,19 @@ let dealerPoints = 0
 let playerPoints = 0
 
 
-//creates deck
+//create deck
 function createDeck() {
     let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
     let types = ["C", "D", "H", "S"]
-    for(i = 0; i < types.length; i++) {
-        for(j = 0; j < values.length; j++) {
-            deck.push(`${values[j]}-${types[i]}`)
+    for(const type of types) {
+        for(const value of values) {
+            deck.push(`${value}-${type}`)
         }
     }
 }
 
 
-
-//shuffles the deck
+//shuffle deck
 function shuffleDeck() {
     for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -32,57 +31,70 @@ function shuffleDeck() {
 }
 
 
-//gets card value
+//get card value
 function getValue(card) {
     let data = card.split("-") // "4-C" -> ["4", "C"]
     let value = data[0]
 
-    if (isNaN(value)) { //A J Q K
-        if (value == "A") {
-            return 11
-        }
-        return 10
-    }
-    return parseInt(value)
+    return isNaN(value) ? value == "A" ? 11 : 10 : parseInt(value)
 }
 
 
-
-
-//starting the game (DEAL)
+//DEAL button
 document.getElementById("start-game-btn").addEventListener("click", function deal() {
-    if(isAlive === true) {
-        return
+    if (isAlive === true) {
+      return
     }
+    //if player does not refresh the page, tables and scores need to be cleared when starting new round
+    dealerCardTable.innerHTML = ""
+    playerCardTable.innerHTML = ""
+    dealerPoints = 0
+    playerPoints = 0
+    gameStatusEl.textContent = ""
+    dealerScoreBoard.innerHTML = "Dealer:"
     createDeck()
     shuffleDeck()
     //generates 1 face down (hidden) and 1 face up card for the dealer
-        const hiddenImg = document.createElement("img")
-        let hiddenCard = deck.pop()
-        dealerPoints += getValue(hiddenCard)
-        hiddenImg.src = "cards/BACK.png"
-        dealerCardTable.append(hiddenImg)
-        const cardImg = document.createElement("img")
-        let card = deck.pop()
-        dealerPoints += getValue(card)
-        cardImg.src = "cards/" + card + ".png"
-        dealerCardTable.append(cardImg)
-        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+    const hiddenImg = document.createElement("img")
+    let hiddenCard = deck.pop()
+    dealerPoints += getValue(hiddenCard)
+    hiddenImg.src = "cards/BACK.png"
+    dealerCardTable.append(hiddenImg)
+    const cardImg = document.createElement("img")
+    let card = deck.pop()
+    dealerPoints += getValue(card)
+    cardImg.src = "cards/" + card + ".png"
+    dealerCardTable.append(cardImg)
     //generates 2 cards for the player
-    for(i = 0; i < 2; i++) {
-        const cardImg = document.createElement("img")
-        let card = deck.pop()
-        playerPoints += getValue(card)
-        playerScoreBoard.innerHTML = `Player: ${playerPoints}`
-        cardImg.src = "cards/" + card + ".png"
-        playerCardTable.append(cardImg)
+    for (i = 0; i < 2; i++) {
+      const cardImg = document.createElement("img")
+      let card = deck.pop()
+      playerPoints += getValue(card)
+      playerScoreBoard.innerHTML = `Player: ${playerPoints}`
+      cardImg.src = "cards/" + card + ".png"
+      playerCardTable.append(cardImg)
     }
-    gameStatusEl.textContent = ""
     //player status
     isAlive = true
-}) 
+    if (dealerPoints === 21 && playerPoints === 21) {
+        gameStatusEl.textContent = "PUSH"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+        } else if (dealerPoints === 21 && playerPoints != 21) {
+        gameStatusEl.textContent = "DEALER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+        } else if (dealerPoints != 21 && playerPoints === 21) {
+        gameStatusEl.textContent = "PLAYER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+    }
+})
+  
+  
+  
 
-//providing a new card (HIT)
+//new card (HIT)
 document.getElementById("new-card-btn").addEventListener("click", function hit() {
     if(isAlive === false) {
         return
@@ -93,10 +105,23 @@ document.getElementById("new-card-btn").addEventListener("click", function hit()
     playerScoreBoard.innerHTML = `Player: ${playerPoints}`
     cardImg.src = "cards/" + card + ".png"
     playerCardTable.append(cardImg)
+    if(playerPoints === 21) {
+        gameStatusEl.textContent = "PLAYER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+    }
+    if(playerPoints > 21) {
+        gameStatusEl.textContent = "DEALER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+    }
 })
 
 //STAND button
 document.getElementById("stand-btn").addEventListener("click", function stand() {
+    if(isAlive === false) {
+        return
+    }
     while(dealerPoints < 17) {
         const cardImg = document.createElement("img")
         let card = deck.pop()
@@ -104,6 +129,19 @@ document.getElementById("stand-btn").addEventListener("click", function stand() 
         cardImg.src = "cards/" + card + ".png"
         dealerCardTable.append(cardImg)
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+    }
+    if (dealerPoints > 21) {
+        gameStatusEl.textContent = "PLAYER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+    } else if (dealerPoints < playerPoints) {
+        gameStatusEl.textContent = "PLAYER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
+    } else {
+        gameStatusEl.textContent = "DEALER WINS"
+        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        isAlive = false
     }
 })
 
