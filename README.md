@@ -1,2 +1,2 @@
 # Blackjack-game
-Blackjack game made with HTML, CSS, JS.
+Blackjack game made with HTML, CSS, JavaScript.
