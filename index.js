@@ -5,6 +5,8 @@ const playerCardTable = document.getElementById("player-card-table")
 const dealerScoreBoard = document.getElementById("dealer-score-board")
 const playerScoreBoard = document.getElementById("player-score-board")
 let deck = []
+let hiddenCard = []
+let hiddenImg = ""
 let isAlive = false
 let dealerPoints = 0
 let playerPoints = 0
@@ -50,15 +52,15 @@ document.getElementById("start-game-btn").addEventListener("click", function dea
     playerCardTable.innerHTML = ""
     dealerPoints = 0
     playerPoints = 0
-    gameStatusEl.textContent = ""
+    gameStatusEl.innerHTML = "GAME IS ON !"
     dealerScoreBoard.innerHTML = "Dealer:"
     createDeck()
     shuffleDeck()
     //generates 1 face down (hidden) and 1 face up card for the dealer
-    const hiddenImg = document.createElement("img")
-    let hiddenCard = deck.pop()
+    hiddenImg = document.createElement("img")
+    hiddenCard = deck.pop()
     dealerPoints += getValue(hiddenCard)
-    hiddenImg.src = "cards/BACK.png"
+    hiddenImg.src = "cards/BACK.png"    
     dealerCardTable.append(hiddenImg)
     const cardImg = document.createElement("img")
     let card = deck.pop()
@@ -77,16 +79,19 @@ document.getElementById("start-game-btn").addEventListener("click", function dea
     //player status
     isAlive = true
     if (dealerPoints === 21 && playerPoints === 21) {
-        gameStatusEl.textContent = "PUSH"
+        gameStatusEl.textContent = "PUSH !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
         } else if (dealerPoints === 21 && playerPoints != 21) {
-        gameStatusEl.textContent = "DEALER WINS"
+        gameStatusEl.textContent = "DEALER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
         } else if (dealerPoints != 21 && playerPoints === 21) {
-        gameStatusEl.textContent = "PLAYER WINS"
+        gameStatusEl.textContent = "PLAYER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
     }
 })
@@ -106,13 +111,15 @@ document.getElementById("new-card-btn").addEventListener("click", function hit()
     cardImg.src = "cards/" + card + ".png"
     playerCardTable.append(cardImg)
     if(playerPoints === 21) {
-        gameStatusEl.textContent = "PLAYER WINS"
+        gameStatusEl.textContent = "PLAYER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
     }
     if(playerPoints > 21) {
-        gameStatusEl.textContent = "DEALER WINS"
+        gameStatusEl.textContent = "DEALER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
     }
 })
@@ -131,16 +138,19 @@ document.getElementById("stand-btn").addEventListener("click", function stand() 
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
     }
     if (dealerPoints > 21) {
-        gameStatusEl.textContent = "PLAYER WINS"
+        gameStatusEl.textContent = "PLAYER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
     } else if (dealerPoints < playerPoints) {
-        gameStatusEl.textContent = "PLAYER WINS"
+        gameStatusEl.textContent = "PLAYER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
     } else {
-        gameStatusEl.textContent = "DEALER WINS"
+        gameStatusEl.textContent = "DEALER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
+        hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
     }
 })
