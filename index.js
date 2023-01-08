@@ -137,12 +137,7 @@ document.getElementById("stand-btn").addEventListener("click", function stand() 
         dealerCardTable.append(cardImg)
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
     }
-    if (dealerPoints === 21 && playerPoints === 21) {
-        gameStatusEl.textContent = "PUSH !"
-        dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
-        hiddenImg.src = "cards/" + hiddenCard + ".png"
-        isAlive = false
-    if (dealerPoints > 21) 
+     if (dealerPoints > 21) {
         gameStatusEl.textContent = "PLAYER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
         hiddenImg.src = "cards/" + hiddenCard + ".png"
@@ -152,7 +147,7 @@ document.getElementById("stand-btn").addEventListener("click", function stand() 
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
         hiddenImg.src = "cards/" + hiddenCard + ".png"
         isAlive = false
-    } else {
+    } else if (dealerPoints > playerPoints){
         gameStatusEl.textContent = "DEALER WINS !"
         dealerScoreBoard.innerHTML = `Dealer: ${dealerPoints}`
         hiddenImg.src = "cards/" + hiddenCard + ".png"
