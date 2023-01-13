@@ -11,6 +11,11 @@ body {
 .container {
     margin: 20px 0;
     height: 150px;
+}
+
+.container,
+.card-table,
+.name-window {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,9 +27,6 @@ body {
     height: 170px;
     border: 10px solid #663300;
     border-radius: 100px;   
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background: #3fe69e;
 }
 
@@ -42,9 +44,6 @@ h2 {
 }
 
 .name-window {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     filter: drop-shadow(0 0 5px white);
 }
 
